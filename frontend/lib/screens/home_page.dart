@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'search_books_page.dart';
-import 'add_book_page.dart';
-import 'borrow_book_page.dart';
-import 'available_books_page.dart';
+import 'package:frontend/screens/AddBookPage.dart';
+import 'package:frontend/screens/borrow_book_page.dart';
+import 'package:frontend/screens/available_books_page.dart';
+import 'package:frontend/utils/logged_user.dart';
 
 class HomePage extends StatelessWidget {
-  final String username;
-  HomePage({required this.username});
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,15 +19,15 @@ class HomePage extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/library_bg.png"), // your background image
-            fit: BoxFit.cover, // makes the image fill the screen
+            image: AssetImage("assets/library_bg.png"),
+            fit: BoxFit.cover,
           ),
         ),
         child: Center(
           child: SingleChildScrollView(
             child: Container(
               padding: const EdgeInsets.all(16.0),
-              margin: EdgeInsets.symmetric(horizontal: 20),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
                 color: const Color.fromARGB(
                   248,
@@ -36,19 +37,21 @@ class HomePage extends StatelessWidget {
                 ).withOpacity(0.9),
                 borderRadius: BorderRadius.circular(20),
               ),
-
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // ✅ GLOBAL USERNAME
                   Text(
-                    "Welcome $username !",
-                    style: TextStyle(
+                    "Welcome ${LoggedUser.username}!",
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 40),
+
+                  const SizedBox(height: 40),
+
                   _menuButton(
                     context,
                     "Search Books",
@@ -56,10 +59,10 @@ class HomePage extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (_) => SearchBooksPage()),
                     ),
-                    Color.fromARGB(255, 142, 219, 241),
+                    const Color.fromARGB(255, 142, 219, 241),
                   ),
 
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   _menuButton(
                     context,
@@ -68,10 +71,10 @@ class HomePage extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (_) => AddBookPage()),
                     ),
-                    Color.fromARGB(255, 246, 245, 248),
+                    const Color.fromARGB(255, 246, 245, 248),
                   ),
 
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   _menuButton(
                     context,
@@ -80,10 +83,10 @@ class HomePage extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (_) => BorrowBookPage()),
                     ),
-                    Color.fromARGB(255, 242, 170, 222),
+                    const Color.fromARGB(255, 242, 170, 222),
                   ),
 
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   _menuButton(
                     context,
@@ -92,27 +95,28 @@ class HomePage extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (_) => AvailableBooksPage()),
                     ),
-                    Color.fromARGB(255, 193, 242, 192),
+                    const Color.fromARGB(255, 193, 242, 192),
                   ),
 
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
 
-                  // BACK / LOGOUT BUTTON
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 250, 235, 175),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: 50,
                         vertical: 15,
                       ),
                     ),
                     onPressed: () {
+                      // LOGOUT CLEANUP
+                      LoggedUser.username = "";
                       Navigator.pushReplacementNamed(context, '/');
                     },
-                    child: Text(
+                    child: const Text(
                       "Logout",
                       style: TextStyle(color: Colors.black),
                     ),
@@ -130,15 +134,15 @@ class HomePage extends StatelessWidget {
     BuildContext context,
     String text,
     VoidCallback onPressed,
-    Color? color,
+    Color color,
   ) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        minimumSize: Size(double.infinity, 50),
+        minimumSize: const Size(double.infinity, 50),
         backgroundColor: color,
       ),
-      child: Text(text, style: TextStyle(color: Colors.black)),
+      child: Text(text, style: const TextStyle(color: Colors.black)),
     );
   }
 }

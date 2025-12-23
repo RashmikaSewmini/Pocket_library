@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/AddBookPage.dart';
 import 'screens/login_page.dart';
 import 'screens/signup_page.dart';
 import 'screens/home_page.dart';
@@ -16,7 +17,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginPage(),
         '/signup': (context) => SignupPage(),
-        '/home': (context) => HomePage(username: ""),
+        '/home': (context) => HomePage(),
+        '/addBook': (context) => AddBookPage(),
       },
     );
   }
