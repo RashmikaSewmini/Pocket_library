@@ -1,6 +1,8 @@
 package com.example.mobile_mini_library.model;
 
 
+import java.time.LocalDate;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,6 +18,10 @@ public class Book {
     private String description;
     private String userId; // username of the owner
 
+    // Borrow info
+    private String borrowedBy;
+    private LocalDate borrowedDate;
+
     // Constructors
     public Book() {}
 
@@ -25,6 +31,8 @@ public class Book {
         this.availability = availability;
         this.description = description;
         this.userId =userId;
+
+        
     }
 
     // Getters and Setters
@@ -39,4 +47,8 @@ public class Book {
     public void setDescription(String description) { this.description = description; }
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
+    public String getBorrowedBy() { return borrowedBy; }
+    public void setBorrowedBy(String borrowedBy) { this.borrowedBy = borrowedBy; }
+    public LocalDate getBorrowedDate() { return borrowedDate; }
+    public void setBorrowedDate(LocalDate borrowedDate) { this.borrowedDate = borrowedDate; }
 }

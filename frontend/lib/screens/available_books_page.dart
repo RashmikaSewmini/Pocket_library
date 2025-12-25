@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/utils/logged_user.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:frontend/utils/logged_user.dart';
+import 'package:frontend/screens/borrow_book_page.dart';
 
 class AvailableBooksPage extends StatefulWidget {
   const AvailableBooksPage({super.key});
 
   @override
-  State<AvailableBooksPage> createState() => _AvailableBooksPageState();
+  _AvailableBooksPageState createState() => _AvailableBooksPageState();
 }
 
 class _AvailableBooksPageState extends State<AvailableBooksPage> {
@@ -17,32 +18,49 @@ class _AvailableBooksPageState extends State<AvailableBooksPage> {
   @override
   void initState() {
     super.initState();
-    fetchMyBooks();
+    fetchBooks();
   }
 
-  Future<void> fetchMyBooks() async {
-    final response = await http.get(
-      Uri.parse('http://10.0.2.2:8080/books/my?userId=${LoggedUser.username}'),
-    );
+  void fetchBooks() async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+          'http://10.0.2.2:8080/books/my?userId=${LoggedUser.username}',
+        ),
+      );
 
-    if (response.statusCode == 200) {
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print(data);
+        setState(() {
+          books = jsonDecode(response.body);
+          loading = false;
+        });
+      } else {
+        setState(() {
+          loading = false;
+        });
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("Failed to load books")));
+      }
+    } catch (e) {
       setState(() {
-        books = jsonDecode(response.body);
         loading = false;
       });
-    } else {
-      setState(() => loading = false);
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text("Failed to load books")));
+      ).showSnackBar(const SnackBar(content: Text("Server not reachable")));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 242, 234, 162),
       appBar: AppBar(
-        title: Text("My Books"),
+        title: const Text("My Books"),
+        elevation: 0,
         backgroundColor: const Color.fromARGB(255, 244, 239, 201),
       ),
       body: Container(
@@ -52,29 +70,63 @@ class _AvailableBooksPageState extends State<AvailableBooksPage> {
             fit: BoxFit.cover,
           ),
         ),
-
         child: loading
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : books.isEmpty
-            ? Center(child: Text("No books added yet"))
+            ? const Center(child: Text("No books found"))
             : ListView.builder(
+                padding: const EdgeInsets.all(16),
                 itemCount: books.length,
                 itemBuilder: (context, index) {
                   final book = books[index];
                   return Card(
-                    margin: EdgeInsets.all(10),
                     child: ListTile(
-                      title: Text(book['name']),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Author: ${book['author']}"),
-                          Text(
-                            "Available: ${book['availability'] ? 'Yes' : 'No'}",
-                          ),
-                          Text("Description: ${book['description']}"),
-                        ],
+                      title: Text(book['name'] ?? 'No Name'),
+                      subtitle: Text(
+                        "Author: ${book['author'] ?? 'Unknown'}\n"
+                        "Available: ${book['availability'] ?? 'Unknown'}\n"
+                        "Borrowed by: ${book['borrowedBy'] ?? 'N/A'}\n"
+                        " Borrowed on: ${book['borrowedDate'] ?? 'N/A'}",
                       ),
+                      trailing: (book['availability'] ?? false)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color.fromARGB(
+                                  255,
+                                  224,
+                                  234,
+                                  146,
+                                ),
+                              ),
+                              onPressed: () {
+                                if (book['id'] != null &&
+                                    book['name'] != null) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => BorrowBookPage(
+                                        bookId: book['id'],
+                                        bookName: book['name'],
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Invalid book data"),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: const Text(
+                                "Borrow",
+                                style: TextStyle(color: Color(0xFF000000)),
+                              ),
+                            )
+                          : const Text(
+                              "Not Available",
+                              style: TextStyle(color: Colors.red),
+                            ),
                     ),
                   );
                 },

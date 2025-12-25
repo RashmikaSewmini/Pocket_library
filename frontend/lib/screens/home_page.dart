@@ -4,6 +4,7 @@ import 'package:frontend/screens/AddBookPage.dart';
 import 'package:frontend/screens/borrow_book_page.dart';
 import 'package:frontend/screens/available_books_page.dart';
 import 'package:frontend/utils/logged_user.dart';
+import 'package:frontend/screens/search_books_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -40,7 +41,7 @@ class HomePage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // ✅ GLOBAL USERNAME
+                  // GLOBAL USERNAME
                   Text(
                     "Welcome ${LoggedUser.username}!",
                     style: const TextStyle(
@@ -81,7 +82,10 @@ class HomePage extends StatelessWidget {
                     "Borrow Book Details",
                     () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => BorrowBookPage()),
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            BorrowBookPage(bookId: "", bookName: ""),
+                      ),
                     ),
                     const Color.fromARGB(255, 242, 170, 222),
                   ),
