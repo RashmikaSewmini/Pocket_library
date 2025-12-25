@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/constants/color.dart';
 import 'package:frontend/utils/logged_user.dart';
+import 'package:frontend/widgets/common_page.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:frontend/constants/style.dart';
 import 'package:frontend/screens/home_page.dart';
+import 'package:frontend/widgets/primary_button.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -57,93 +60,59 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 242, 234, 162),
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: const Color.fromARGB(255, 244, 239, 201),
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/library_bg.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.all(16.0),
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(
-                  248,
-                  162,
-                  159,
-                  159,
-                ).withOpacity(0.9),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                children: [
-                  const Text(
-                    "Login",
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+    return CommonPage(
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              color: backgroundGray.withOpacity(0.9),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              children: [
+                const Text(
+                  "Login",
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: bgBlack,
                   ),
-                  const SizedBox(height: 50),
+                ),
+                const SizedBox(height: 50),
 
-                  TextFormField(
-                    controller: usernameController,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: textInputDecoration.copyWith(
-                      hintText: "Username",
-                    ),
+                TextFormField(
+                  controller: usernameController,
+                  style: const TextStyle(color: letterwhite),
+                  decoration: textInputDecoration.copyWith(
+                    hintText: "Username",
                   ),
-                  const SizedBox(height: 10),
+                ),
+                const SizedBox(height: 10),
 
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: textInputDecoration.copyWith(
-                      hintText: "Password",
-                    ),
+                TextFormField(
+                  controller: passwordController,
+                  obscureText: true,
+                  style: const TextStyle(color: letterwhite),
+                  decoration: textInputDecoration.copyWith(
+                    hintText: "Password",
                   ),
-                  const SizedBox(height: 20),
+                ),
+                const SizedBox(height: 20),
 
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 250, 235, 175),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 50,
-                        vertical: 15,
-                      ),
-                    ),
-                    onPressed: login,
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
+                PrimaryButton(text: "Login", onPressed: login),
 
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/signup');
-                    },
-                    child: const Text(
-                      "If you don't have an account? Sign up.",
-                      style: TextStyle(color: Colors.black),
-                    ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/signup');
+                  },
+                  child: const Text(
+                    "If you don't have an account? Sign up.",
+                    style: TextStyle(color: bgBlack),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
